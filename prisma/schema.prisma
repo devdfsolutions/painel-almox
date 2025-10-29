@@ -5,7 +5,7 @@ generator client {
 }
 
 datasource db {
- provider  = "postgresql"
+  provider  = "postgresql"
   url       = env("DATABASE_URL") // Pooler 6543 (app em runtime)
   directUrl = env("DIRECT_URL")   // Direto 5432 (migrate/seed)
 }
