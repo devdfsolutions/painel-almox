@@ -1,14 +1,13 @@
 generator client {
   provider      = "prisma-client-js"
   engineType    = "binary"
-  // cobrindo local + vercel x64/arm64 + rhel
-  binaryTargets = ["native", "linux-x64-openssl-3.0.x", "linux-arm64-openssl-3.0.x", "rhel-openssl-3.0.x"]
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
   provider  = "postgresql"
-  url       = env("DATABASE_URL") // Pooler 6543 (runtime)
-  directUrl = env("DIRECT_URL")   // Direto 5432 (migrate/seed)
+  url       = env("DATABASE_URL") // Pooler (6543) - runtime
+  directUrl = env("DIRECT_URL")   // Direto (5432) - migrate/seed
 }
 
 enum Role {
