@@ -1,15 +1,18 @@
+// ===== Prisma Client =====
 generator client {
   provider      = "prisma-client-js"
   engineType    = "binary"
   binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
+// ===== Data source =====
 datasource db {
   provider  = "postgresql"
-  url       = env("DATABASE_URL") // Pooler (runtime)
-  directUrl = env("DIRECT_URL")   // Direto (migrate/seed)
+  url       = env("DATABASE_URL") // Pooler 6543 (runtime)
+  directUrl = env("DIRECT_URL")   // Direto 5432 (migrate/seed)
 }
 
+// ===== Enums =====
 enum Role {
   ADMIN
   USER
@@ -20,6 +23,7 @@ enum TipoItem {
   ALUGAVEL
 }
 
+// ===== Models =====
 model Tenant {
   id        String   @id @default(cuid())
   nome      String
