@@ -1,4 +1,3 @@
-// src/lib/auth.ts
 import Credentials from "next-auth/providers/credentials";
 import type { NextAuthOptions } from "next-auth";
 import { prisma } from "./prisma";
@@ -34,7 +33,7 @@ export const authOptions: NextAuthOptions = {
           } as any;
         } catch (e) {
           console.error("AUTH_AUTHORIZE_ERROR", e);
-          return null; // evita redirecionar para /api/auth/error
+          return null; // evita /api/auth/error
         }
       },
     }),
