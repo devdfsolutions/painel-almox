@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+ provider  = "postgresql"
+  url       = env("DATABASE_URL") // Pooler 6543 (app em runtime)
+  directUrl = env("DIRECT_URL")   // Direto 5432 (migrate/seed)
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum TipoItem {
+  PATRIMONIO
+  ALUGAVEL
+}
+
+model Tenant {
+  id        String   @id @default(cuid())
+  nome      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  usuarios  Usuario[]
+  itens     Item[]
+  custodias Custodia[]
+  locacoes  Locacao[]
+}
+
+model Usuario {
+  id        String   @id @default(cuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  nome      String
+  email     String   @unique
+  senhaHash String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Item {
+  id        String    @id @default(cuid())
+  tenantId  String
+  tenant    Tenant    @relation(fields: [tenantId], references: [id])
+
+  nome      String
+  codigo    String?
+  tipo      TipoItem
+  descricao String?
+  ativo     Boolean   @default(true)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  custodias Custodia[]
+  locacoes  Locacao[]
+}
+
+model Custodia {
+  id          String   @id @default(cuid())
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+
+  itemId      String
+  item        Item     @relation(fields: [itemId], references: [id])
+
+  funcionario String
+  setor       String?
+  inicio      DateTime @default(now())
+  fim         DateTime?
+  observacao  String?
+
+  createdAt   DateTime @default(now())
+
+  @@index([tenantId, itemId])
+  @@index([tenantId, funcionario])
+}
+
+model Locacao {
+  id          String   @id @default(cuid())
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+
+  itemId      String
+  item        Item     @relation(fields: [itemId], references: [id])
+
+  destino     String
+  responsavel String?
+  inicio      DateTime @default(now())
+  fimPrevisto DateTime
+  fimEfetivo  DateTime?
+  observacao  String?
+
+  createdAt   DateTime @default(now())
+
+  @@index([tenantId, itemId])
+  @@index([tenantId, fimPrevisto])
+}
