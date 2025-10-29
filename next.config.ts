@@ -1,11 +1,12 @@
-// next.config.ts
+import type { NextConfig } from "next";
 import path from "path";
 
-const nextConfig = {
+const config: NextConfig = {
   outputFileTracingIncludes: {
-    "/api/(.*)": [path.join(process.cwd(), "node_modules/.prisma/client/**")],
-    "/app/(.*)": [path.join(process.cwd(), "node_modules/.prisma/client/**")]
+    // inclui os binários do Prisma nas serverless functions
+    "/api/(.*)": [path.join(process.cwd(), "node_modules/.prisma/client")],
+    "/(app|pages)/(.*)": [path.join(process.cwd(), "node_modules/.prisma/client")]
   }
 };
 
-export default nextConfig;
+export default config;
