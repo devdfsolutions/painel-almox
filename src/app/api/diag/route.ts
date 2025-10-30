@@ -4,20 +4,30 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
-    const usuarios = await prisma.usuario.findMany({
+    const users = await prisma.usuario.findMany({
       take: 5,
-      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        email: true,
+        nome: true,
+        role: true,
+      },
     });
 
     return NextResponse.json({
       ok: true,
-      usuarios,
+      users,
+      env: {
+        databaseUrl: !!process.env.DATABASE_URL,
+        directUrl: !!process.env.DIRECT_URL,
+        prismaEngine: process.env.PRISMA_CLIENT_ENGINE_TYPE || "not-set",
+      },
     });
-  } catch (err: any) {
+  } catch (error: any) {
     return NextResponse.json(
       {
         ok: false,
-        error: err.message ?? String(err),
+        error: error?.message ?? String(error),
       },
       { status: 500 }
     );
