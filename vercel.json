@@ -1,3 +1,16 @@
 {
-  "ignoreCommand": ""
+  "functions": {
+    "app/api/**/route.js": {
+      "runtime": "nodejs20.x",
+      "memory": 1024,
+      "maxDuration": 10,
+      "includeFiles": "node_modules/.prisma/client/**"
+    },
+    "app/api/**/route.ts": {
+      "runtime": "nodejs20.x",
+      "memory": 1024,
+      "maxDuration": 10,
+      "includeFiles": "node_modules/.prisma/client/**"
+    }
+  }
 }
