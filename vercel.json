@@ -3,7 +3,7 @@
     "src/app/api/**": {
       "includeFiles": "node_modules/.prisma/client/**"
     },
-    "src/app/(app)/**": {
+    "src/app/app/**": {
       "includeFiles": "node_modules/.prisma/client/**"
     }
   }
