@@ -2,7 +2,6 @@
 import Credentials from "next-auth/providers/credentials";
 import type { NextAuthOptions } from "next-auth";
 import { prisma } from "./prisma";
-// ⬇️ usa versão 100% JS, funciona no Vercel
 import bcrypt from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
@@ -15,33 +14,27 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Senha", type: "password" },
       },
       async authorize(credentials) {
-        // proteção básica
         if (!credentials?.email || !credentials?.password) {
           return null;
         }
 
-        // 1. busca usuário
         const user = await prisma.usuario.findUnique({
           where: { email: credentials.email },
         });
 
         if (!user) {
-          // email não existe
           return null;
         }
 
-        // 2. compara senha usando bcryptjs
         const ok = await bcrypt.compare(
           credentials.password,
           user.senhaHash ?? ""
         );
 
         if (!ok) {
-          // senha errada
           return null;
         }
 
-        // 3. devolve objeto que vai pro token
         return {
           id: user.id,
           name: user.nome,
