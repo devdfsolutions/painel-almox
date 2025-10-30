@@ -1,6 +1,7 @@
 import path from "path";
+import type { NextConfig } from "next";
 
-const nextConfig = {
+const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/api/(.*)": [
       path.join(process.cwd(), "node_modules/.prisma/client"),
