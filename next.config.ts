@@ -1,15 +1,14 @@
-// next.config.mjs
 import path from "path";
+import type { NextConfig } from "next";
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {},
-  // isso aqui manda o Vercel levar a pasta dos engines do Prisma
+const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
-    "/api/(.*)": [
+    // todas as rotas de API
+    "/src/app/api/(.*)": [
       path.join(process.cwd(), "node_modules/.prisma/client"),
       path.join(process.cwd(), "node_modules/@prisma/client")
     ],
+    // fallback geral (páginas que possam chamar prisma no server)
     "/(.*)": [
       path.join(process.cwd(), "node_modules/.prisma/client"),
       path.join(process.cwd(), "node_modules/@prisma/client")
