@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  // deixa o Prisma decidir o binário em runtime (Vercel já sabe lidar)
   engineType = "binary"
 }
 
