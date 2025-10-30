@@ -1,15 +1,13 @@
-// prisma/schema.prisma
 generator client {
-  provider      = "prisma-client-js"
-  engineType    = "binary"
-  // Targets para dev local e produção no Vercel (Amazon Linux/glibc)
-  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+  provider = "prisma-client-js"
+  // deixa o Prisma decidir o binário em runtime (Vercel já sabe lidar)
+  engineType = "binary"
 }
 
 datasource db {
   provider  = "postgresql"
-  url       = env("DATABASE_URL") // Pooler (runtime)
-  directUrl = env("DIRECT_URL")   // Direto (migrate/seed)
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum Role {
