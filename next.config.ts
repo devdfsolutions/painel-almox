@@ -1,17 +1,13 @@
-import type { NextConfig } from "next";
+// next.config.ts
 import path from "path";
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Inclui os binários do Prisma no bundle das functions
+  outputFileTracing: true,
+  // Inclui a pasta que contém os engines do Prisma no bundle do Lambda
   outputFileTracingIncludes: {
-    "/api/(.*)": [
-      path.join(process.cwd(), "node_modules/.prisma/client"),
-      path.join(process.cwd(), "node_modules/@prisma/engines")
-    ],
-    "/app/(.*)": [
-      path.join(process.cwd(), "node_modules/.prisma/client"),
-      path.join(process.cwd(), "node_modules/@prisma/engines")
-    ]
+    "/api/(.*)": [path.join(process.cwd(), "node_modules/.prisma/client")],
+    "/(.*)": [path.join(process.cwd(), "node_modules/.prisma/client")]
   }
 };
 
