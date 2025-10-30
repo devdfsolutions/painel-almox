@@ -1,5 +1,5 @@
 // src/lib/auth.ts
-import Credentials from "next-auth/providers/credentials";
+import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthOptions } from "next-auth";
 import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
@@ -7,7 +7,7 @@ import bcrypt from "bcryptjs";
 export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
   providers: [
-    Credentials({
+    CredentialsProvider({
       name: "Credentials",
       credentials: {
         email: { label: "E-mail", type: "email" },
