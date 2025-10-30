@@ -18,15 +18,13 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
+        // 👇 AQUI que tava estourando pq não achava o engine
         const user = await prisma.usuario.findUnique({
           where: { email: credentials.email },
         });
         if (!user) return null;
 
-        const ok = await bcrypt.compare(
-          credentials.password,
-          user.senhaHash ?? ""
-        );
+        const ok = await bcrypt.compare(credentials.password, user.senhaHash ?? "");
         if (!ok) return null;
 
         return {
