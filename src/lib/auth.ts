@@ -1,7 +1,9 @@
+// src/lib/auth.ts
 import Credentials from "next-auth/providers/credentials";
 import type { NextAuthOptions } from "next-auth";
 import { prisma } from "./prisma";
-import bcrypt from "bcrypt";
+// ⬇️ usa versão 100% JS, funciona no Vercel
+import bcrypt from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
@@ -13,28 +15,40 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Senha", type: "password" },
       },
       async authorize(credentials) {
-        try {
-          if (!credentials?.email || !credentials?.password) return null;
-
-          const user = await prisma.usuario.findUnique({
-            where: { email: credentials.email },
-          });
-          if (!user) return null;
-
-          const ok = await bcrypt.compare(credentials.password, user.senhaHash);
-          if (!ok) return null;
-
-          return {
-            id: user.id,
-            name: user.nome,
-            email: user.email,
-            tenantId: user.tenantId,
-            role: user.role,
-          } as any;
-        } catch (e) {
-          console.error("AUTH_AUTHORIZE_ERROR", e);
-          return null; // evita /api/auth/error
+        // proteção básica
+        if (!credentials?.email || !credentials?.password) {
+          return null;
         }
+
+        // 1. busca usuário
+        const user = await prisma.usuario.findUnique({
+          where: { email: credentials.email },
+        });
+
+        if (!user) {
+          // email não existe
+          return null;
+        }
+
+        // 2. compara senha usando bcryptjs
+        const ok = await bcrypt.compare(
+          credentials.password,
+          user.senhaHash ?? ""
+        );
+
+        if (!ok) {
+          // senha errada
+          return null;
+        }
+
+        // 3. devolve objeto que vai pro token
+        return {
+          id: user.id,
+          name: user.nome,
+          email: user.email,
+          tenantId: user.tenantId,
+          role: user.role,
+        } as any;
       },
     }),
   ],
@@ -52,6 +66,8 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  pages: { signIn: "/login" },
+  pages: {
+    signIn: "/login",
+  },
   secret: process.env.NEXTAUTH_SECRET,
 };
