@@ -1,13 +1,10 @@
-import path from "path";
+// next.config.ts
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
-    "/src/app/api/(.*)": [
-      path.join(process.cwd(), "node_modules/.prisma/client"),
-      path.join(process.cwd(), "node_modules/@prisma/client")
-    ],
-    "/(.*)": [
+    "/api/(.*)": [
       path.join(process.cwd(), "node_modules/.prisma/client"),
       path.join(process.cwd(), "node_modules/@prisma/client")
     ]
