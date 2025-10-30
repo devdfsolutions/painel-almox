@@ -1,5 +1,4 @@
-// src/lib/auth.ts
-import CredentialsProvider from "next-auth/providers/credentials";
+import Credentials from "next-auth/providers/credentials";
 import type { NextAuthOptions } from "next-auth";
 import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
@@ -7,7 +6,7 @@ import bcrypt from "bcryptjs";
 export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
   providers: [
-    CredentialsProvider({
+    Credentials({
       name: "Credentials",
       credentials: {
         email: { label: "E-mail", type: "email" },
@@ -21,19 +20,13 @@ export const authOptions: NextAuthOptions = {
         const user = await prisma.usuario.findUnique({
           where: { email: credentials.email },
         });
-
-        if (!user) {
-          return null;
-        }
+        if (!user) return null;
 
         const ok = await bcrypt.compare(
           credentials.password,
           user.senhaHash ?? ""
         );
-
-        if (!ok) {
-          return null;
-        }
+        if (!ok) return null;
 
         return {
           id: user.id,
