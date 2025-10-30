@@ -1,9 +1,9 @@
 {
   "functions": {
-    "api/**": {
+    "src/app/api/**": {
       "includeFiles": "node_modules/.prisma/client/**"
     },
-    "app/**": {
+    "src/app/(app)/**": {
       "includeFiles": "node_modules/.prisma/client/**"
     }
   }
