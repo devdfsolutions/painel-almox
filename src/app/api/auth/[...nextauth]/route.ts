@@ -2,8 +2,8 @@
 import NextAuth from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
+export const runtime = "nodejs";        // força lambda node
+export const dynamic = "force-dynamic"; // sem cache
 
 const handler = NextAuth(authOptions);
 
